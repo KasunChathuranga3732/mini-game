@@ -1,0 +1,9 @@
+{
+  "name": "mini-game",
+  "version": "1.0.0",
+  "author": "Kasun Chathuranga",
+  "license": "MIT",
+  "dependencies": {
+    "jquery": "^3.7.0"
+  }
+}
