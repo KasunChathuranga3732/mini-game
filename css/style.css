@@ -16,3 +16,14 @@ body {
     background-size:contain;
     background-position: center;
 }
+
+.box {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    /*background-color: rgb(222, 191, 191);*/
+    top: 67vh;
+    background-repeat: no-repeat;
+    background-size:contain;
+    z-index: 1;
+}
