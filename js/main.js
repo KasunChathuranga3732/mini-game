@@ -17,6 +17,7 @@ let dx = 0;
 let score = 0;
 let down = false;
 let up = true;
+let dead = false;
 
 
 
@@ -63,7 +64,10 @@ setInterval(()=>{
         boxElm.style.top = 67 + 'vh';
     } else if(down && (a % 7 === 0)){
         drawSlide();
+    } else if(dead && (a % 3 === 0)){
+        drawDead();
     }
+
 }, 40);
 
 
@@ -106,6 +110,15 @@ function drawSlide(){
         slide = 1;
         boxElm.style.top = 70 +'vh';
     }
+}
+
+let ddead = 1;
+function drawDead(){
+    boxElm.style.top = 67 + 'vh';
+    if(ddead === 11) {
+        ddead = 10;
+    }
+    boxElm.style.backgroundImage = `url('img/Dead (${ddead++}).png')`;
 }
 
 
