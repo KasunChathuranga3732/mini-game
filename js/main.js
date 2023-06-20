@@ -4,6 +4,12 @@ const htmlElm = document.body;
 boxElm.classList.add('box');
 backElm.appendChild(boxElm);
 
+const scoreBoard = document.createElement('div');
+scoreBoard.className = 'score';
+scoreBoard.innerText = `Score: 0`;
+backElm.appendChild(scoreBoard);
+
+
 
 
 setInterval(()=> {
