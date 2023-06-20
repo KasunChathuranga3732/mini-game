@@ -15,6 +15,8 @@ let jump = false;
 let run = false;
 let dx = 0;
 let score = 0;
+let down = false;
+let up = true;
 
 
 
@@ -29,6 +31,11 @@ document.body.addEventListener('keydown', (eventData)=> {
         run = true;
         boxElm.style.transform = "rotateY(180deg)";
         dx = -30;
+    } else if (eventData.code === 'ArrowDown'){
+        down = true;
+        up = false;
+    } else if (eventData.code === 'ArrowUp'){
+        up = true;
     }
 });
 
@@ -47,13 +54,15 @@ document.body.addEventListener('keyup', (eventData) => {
 let a = 0;
 setInterval(()=>{
     a++;
-    if(!jump && !run){
+    if(!jump && !run && !down){
         drawIdle();
     } else if(jump && (a % 2 === 0)){
         drawJump()
     } else if(run && (a % 2 === 0)) {
         drawRun();
         boxElm.style.top = 67 + 'vh';
+    } else if(down && (a % 7 === 0)){
+        drawSlide();
     }
 }, 40);
 
@@ -85,6 +94,18 @@ let move = 1;
 function drawRun(){
     boxElm.style.backgroundImage = `url('img/Run (${move++}).png')`;
     if(move === 9) move = 1;
+}
+
+let slide = 1;
+function drawSlide(){
+    boxElm.style.backgroundImage = `url('img/Slide (${slide++}).png')`;
+    boxElm.style.top = 70 +'vh';
+    if(slide === 6) {
+        down = false;
+        up = true;
+        slide = 1;
+        boxElm.style.top = 70 +'vh';
+    }
 }
 
 
