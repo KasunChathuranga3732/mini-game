@@ -1,10 +1,10 @@
-const backElm = document.body.querySelector('#background');
+const btnStart = $('#btn-start');
+const contentElm = $('#content');
 const boxElm = document.createElement('div');
 const htmlElm = document.body;
 boxElm.classList.add('box');
+const backElm = document.body.querySelector('#background');
 backElm.appendChild(boxElm);
-const btnStart = $('#btn-start');
-const contentElm = $('#content');
 
 const scoreBoard = document.createElement('div');
 scoreBoard.className = 'score';
@@ -19,16 +19,24 @@ scoreBoard.style.visibility = 'hidden';
 
 
 
+
 let jump = false;
 let run = false;
-let dx = 0;
-let score = 0;
 let down = false;
 let up = true;
 let dead = false;
 let moving = false;
+let dx = 0;
+let score = 0;
 const fireElmList = [];
 const ballElmList = [];
+
+let runSound = new Audio("sound/running (mp3cut.net).wav");
+let jumpSound = new Audio("sound/jump.mp3");
+let slideSound = new Audio("sound/slide.mp3");
+let background = new Audio("sound/background.mp3");
+let over = new Audio("sound/over.mp3");
+
 
 
 btnStart.on('click', (eventData)=> {
@@ -39,25 +47,26 @@ btnStart.on('click', (eventData)=> {
     scoreBoard.style.visibility = 'visible';
     frontdiv.style.visibility = 'hidden';
     barrierVisible();
+
 });
 
 
 document.body.addEventListener('keydown', (eventData)=> {
-    if(moving) {
-        if (eventData.code === 'Space') {
+    if(moving){
+        if (eventData.code === 'Space'){
             jump = true;
-        } else if (eventData.code === 'ArrowRight') {
+        }else if (eventData.code === 'ArrowRight'){
             boxElm.style.transform = "";
             run = true;
             dx = 30;
-        } else if (eventData.code === 'ArrowLeft') {
+        }else if (eventData.code === 'ArrowLeft'){
             run = true;
             boxElm.style.transform = "rotateY(180deg)";
             dx = -30;
-        } else if (eventData.code === 'ArrowDown') {
+        } else if (eventData.code === 'ArrowDown'){
             down = true;
             up = false;
-        } else if (eventData.code === 'ArrowUp') {
+        } else if (eventData.code === 'ArrowUp'){
             up = true;
         } else if (eventData.code === 'Escape'){
             moving = false;
@@ -76,37 +85,16 @@ document.body.addEventListener('keydown', (eventData)=> {
 });
 
 document.body.addEventListener('keyup', (eventData) => {
-    if(moving) {
-        if (eventData.code === 'ArrowRight') {
+    if(moving){
+        if (eventData.code === 'ArrowRight'){
             run = false;
             dx = 0;
-        } else if (eventData.code === 'ArrowLeft') {
+        }else if (eventData.code === 'ArrowLeft'){
             run = false;
             dx = 0;
         }
     }
 });
-
-
-
-let a = 0;
-setInterval(()=>{
-    a++;
-    if(!jump && !run && !down && !dead){
-        drawIdle();
-    } else if(jump && (a % 2 === 0)){
-        drawJump()
-    } else if(run && (a % 2 === 0)) {
-        drawRun();
-        boxElm.style.top = 67 + 'vh';
-    } else if(down && (a % 7 === 0)){
-        drawSlide();
-    } else if(dead && (a % 3 === 0)){
-        drawDead();
-    }
-
-}, 40);
-
 
 let runspeed = 0
 setInterval(()=> {
@@ -123,6 +111,59 @@ setInterval(()=> {
 }, 5);
 
 
+let a = 0;
+setInterval(()=>{
+    a++;
+    if(!run && !jump && !down && !dead){
+        drawIdle();
+    } else if(run && (a % 2 === 0) && !down && !jump){
+        drawRun();
+        boxElm.style.top = 67+ 'vh';
+
+    } else if(jump && (a % 2 === 0)){
+        drawJump();
+
+    }else if(down && (a % 7 === 0)){
+        drawSlide();
+
+    } else if(dead && (a % 3 === 0)){
+        drawDead();
+    }
+
+
+    if(run && !jump && !down && !dead){
+        runSound.play();
+    }
+    if(!run){
+        runSound.pause();
+    }
+
+    if(jump){
+        jumpSound.play();
+        runSound.pause();
+    } else if(!jump){
+        jumpSound.pause();
+    }
+
+    if(down){
+        slideSound.play();
+        runSound.pause();
+    } else if(!down){
+        slideSound.pause();
+    }
+
+    if(dead && !deadsound){
+        over.play();
+        runSound.pause();
+    } else if(!down){
+        over.pause();
+    }
+
+    if ( a == 150) a = 0;
+
+},40);
+
+
 setInterval(()=>{
     if(moving){
 
@@ -130,6 +171,8 @@ setInterval(()=>{
 
         score +=10;
         scoreBoard.innerText = `Score: ${score}`;
+
+        if(b === 100) b = 0;
     }
 },40);
 
@@ -173,54 +216,6 @@ function space(elm, gap){
 }
 
 
-let idle = 1;
-function drawIdle(){
-    boxElm.style.backgroundImage = `url('img/Idle (${idle++}).png')`;
-    if(idle === 11) idle = 1;
-}
-
-let dJump = 1;
-function drawJump(){
-    boxElm.style.backgroundImage = `url('img/Jump (${dJump++}).png')`;
-    if(dJump === 11) dJump = 1;
-}
-
-let move = 1;
-function drawRun(){
-    boxElm.style.backgroundImage = `url('img/Run (${move++}).png')`;
-    if(move === 9) move = 1;
-}
-
-let slide = 1;
-function drawSlide(){
-    boxElm.style.backgroundImage = `url('img/Slide (${slide++}).png')`;
-    boxElm.style.top = 70 +'vh';
-    if(slide === 6) {
-        down = false;
-        up = true;
-        slide = 1;
-        boxElm.style.top = 70 +'vh';
-    }
-}
-
-let ddead = 1;
-function drawDead(){
-    boxElm.style.top = 67 + 'vh';
-    if(ddead === 11) {
-        ddead = 10;
-    }
-    boxElm.style.backgroundImage = `url('img/Dead (${ddead++}).png')`;
-}
-
-let backgroundImagePosition = 0;
-function moveBackground(){
-    backgroundImagePosition -= 0.7;
-    run = true;
-    backElm.style.backgroundPositionX = backgroundImagePosition + 'px';
-}
-
-
-
 
 let angle = 0;
 function doJump(){
@@ -243,7 +238,62 @@ function doRun(){
 }
 
 
-let fireLeft = 1000;
+let idle = 1;
+function drawIdle(){
+    boxElm.style.backgroundImage = `url('img/Idle (${idle++}).png')`;
+    if(idle === 11) idle = 1;
+}
+
+
+let move = 1;
+function drawRun(){
+    boxElm.style.backgroundImage = `url('img/Run (${move++}).png')`;
+    if(move === 9) move = 1;
+}
+
+let dJump = 1;
+function drawJump(){
+    boxElm.style.backgroundImage = `url('img/Jump (${dJump++}).png')`;
+    if(dJump === 11) dJump = 1;
+}
+
+
+
+let backgroundImagePosition = 0;
+function moveBackground(){
+    backgroundImagePosition -= 0.7;
+    run = true;
+    backElm.style.backgroundPositionX = backgroundImagePosition + 'px';
+}
+
+let slide = 1;
+function drawSlide(){
+    boxElm.style.backgroundImage = `url('img/Slide (${slide++}).png')`;
+    boxElm.style.top = 70 +'vh';
+    if(slide === 6) {
+        down = false;
+        up = true;
+        slide = 1;
+        boxElm.style.top = 70 +'vh';
+    }
+}
+
+let deadsound = false;
+let ddead = 1;
+function drawDead(){
+    boxElm.style.top = 67 + 'vh';
+    if(ddead === 11) {
+        ddead = 10;
+        over.pause();
+        deadsound = true;
+    }
+    boxElm.style.backgroundImage = `url('img/Dead (${ddead++}).png')`;
+}
+
+
+
+
+fireLeft = 1000;
 function fireElm(){
     for(let i=0; i<20; i++){
         var fireDiv = document.createElement('div');
@@ -254,9 +304,10 @@ function fireElm(){
         fireElmList.push(fireDiv);
         fireLeft += 1400;
     }
+
 }
 
-let ballLeft = 1700;
+ballLeft = 1700;
 function ballElm(){
     for(let i=0; i<20; i++){
         var ballDiv = document.createElement('div');
@@ -267,6 +318,7 @@ function ballElm(){
         ballElmList.push(ballDiv);
         ballLeft += 1400;
     }
+
 }
 
 
@@ -279,6 +331,7 @@ function barrierVisible(){
     fireElmList.forEach(elm=> elm.style.visibility = 'visible');
     ballElmList.forEach(elm=> elm.style.visibility = 'visible');
 }
+
 
 function fail(){
     dead = true;
@@ -320,7 +373,3 @@ function finish(){
         location.reload();
     },5000);
 }
-
-
-
-
