@@ -130,8 +130,6 @@ setInterval(()=>{
 
         score +=10;
         scoreBoard.innerText = `Score: ${score}`;
-
-        if(b === 100) b = 0;
     }
 },40);
 
@@ -139,11 +137,14 @@ setInterval(()=>{
 setInterval(()=>{
     if(moving) {
         ballElmList.forEach(elm => space(elm, 30));
+
+        if (score === 24000) {
+            finish();
+        }
     }
 },40);
 
 
-/* Functions */
 function space(elm, gap){
     if(score < 5000){
         elm.style.left = elm.x - 7 + 'px';
@@ -162,6 +163,13 @@ function space(elm, gap){
         elm.x = elm.x - 18;
     }
 
+    let xdiff = (boxElm.offsetLeft + boxElm.offsetWidth/2) - (elm.offsetLeft + elm.offsetWidth/2);
+    let ydiff = (boxElm.offsetTop + boxElm.offsetHeight/2) - (elm.offsetTop + elm.offsetHeight/2);
+
+    const hypot = Math.hypot(xdiff, ydiff);
+    if(hypot < boxElm.offsetWidth/2 + elm.offsetWidth/2 - gap){
+        fail();
+    }
 }
 
 
@@ -235,7 +243,7 @@ function doRun(){
 }
 
 
-fireLeft = 1000;
+let fireLeft = 1000;
 function fireElm(){
     for(let i=0; i<20; i++){
         var fireDiv = document.createElement('div');
@@ -248,7 +256,7 @@ function fireElm(){
     }
 }
 
-ballLeft = 1700;
+let ballLeft = 1700;
 function ballElm(){
     for(let i=0; i<20; i++){
         var ballDiv = document.createElement('div');
@@ -270,6 +278,47 @@ function barrierHidden(){
 function barrierVisible(){
     fireElmList.forEach(elm=> elm.style.visibility = 'visible');
     ballElmList.forEach(elm=> elm.style.visibility = 'visible');
+}
+
+function fail(){
+    dead = true;
+    moving = false;
+    run = false;
+    jump = false;
+    slide = false;
+    setTimeout(() => {
+        winmsg.innerText = `Fail
+                            Your Score: ${score}`
+        frontdiv.style.visibility = 'visible';
+        boxElm.style.visibility = 'hidden';
+        scoreBoard.style.visibility = 'hidden';
+        contentElm.css('visibility', 'hidden');
+        barrierHidden();
+    }, 3000);
+    setTimeout(() => {
+        btnStart.text('Reload');
+        location.reload();
+    },5000);
+}
+
+function finish(){
+    moving = false;
+    run = false;
+    jump = false;
+    slide = false;
+
+    winmsg.innerText = `You Won the GAME
+                            Your Score: ${score}`
+    frontdiv.style.visibility = 'visible';
+    boxElm.style.visibility = 'hidden';
+    scoreBoard.style.visibility = 'hidden';
+    contentElm.css('visibility', 'hidden');
+    barrierHidden();
+
+    setTimeout(() => {
+        btnStart.text('Reload');
+        location.reload();
+    },5000);
 }
 
 
