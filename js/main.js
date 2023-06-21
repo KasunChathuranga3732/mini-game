@@ -27,13 +27,18 @@ let down = false;
 let up = true;
 let dead = false;
 let moving = false;
+const fireElmList = [];
+const ballElmList = [];
 
 
 btnStart.on('click', (eventData)=> {
     moving = true;
+    ballElm();
+    fireElm();
     boxElm.style.visibility = 'visible';
     scoreBoard.style.visibility = 'visible';
     frontdiv.style.visibility = 'hidden';
+    barrierVisible();
 });
 
 
@@ -54,6 +59,18 @@ document.body.addEventListener('keydown', (eventData)=> {
             up = false;
         } else if (eventData.code === 'ArrowUp') {
             up = true;
+        } else if (eventData.code === 'Escape'){
+            moving = false;
+            run = false;
+            jump = false;
+            slide = false;
+            frontdiv.style.visibility = 'visible';
+            boxElm.style.visibility = 'hidden';
+            scoreBoard.style.visibility = 'hidden';
+            btnStart.text('RESTART');
+            barrierHidden();
+
+
         }
     }
 });
@@ -106,6 +123,46 @@ setInterval(()=> {
 }, 5);
 
 
+setInterval(()=>{
+    if(moving){
+
+        fireElmList.forEach(elm => space(elm, 10));
+
+        score +=10;
+        scoreBoard.innerText = `Score: ${score}`;
+
+        if(b === 100) b = 0;
+    }
+},40);
+
+
+setInterval(()=>{
+    if(moving) {
+        ballElmList.forEach(elm => space(elm, 30));
+    }
+},40);
+
+
+/* Functions */
+function space(elm, gap){
+    if(score < 5000){
+        elm.style.left = elm.x - 7 + 'px';
+        elm.x = elm.x - 7;
+    } else if(score >= 5000 && score < 10000){
+        elm.style.left = elm.x - 9 + 'px';
+        elm.x = elm.x - 9;
+    } else if(score >= 10000 && score < 15000){
+        elm.style.left = elm.x - 12 + 'px';
+        elm.x = elm.x - 12;
+    } else if(score >= 15000 && score < 20000) {
+        elm.style.left = elm.x - 15 + 'px';
+        elm.x = elm.x - 15;
+    } else {
+        elm.style.left = elm.x - 18 + 'px';
+        elm.x = elm.x - 18;
+    }
+
+}
 
 
 let idle = 1;
@@ -175,6 +232,44 @@ function doRun(){
         x = innerWidth - boxElm.offsetWidth;
     }else if (x <= 0) x = 0;
     boxElm.style.left = `${x}px`;
+}
+
+
+fireLeft = 1000;
+function fireElm(){
+    for(let i=0; i<20; i++){
+        var fireDiv = document.createElement('div');
+        fireDiv.className = 'fire';
+        fireDiv.style.left = fireLeft + 'px';
+        fireDiv.x = fireLeft;
+        document.getElementById('background').appendChild(fireDiv);
+        fireElmList.push(fireDiv);
+        fireLeft += 1400;
+    }
+}
+
+ballLeft = 1700;
+function ballElm(){
+    for(let i=0; i<20; i++){
+        var ballDiv = document.createElement('div');
+        ballDiv.className = 'ball';
+        ballDiv.style.left = ballLeft + 'px';
+        ballDiv.x = ballLeft;
+        document.getElementById('background').appendChild(ballDiv);
+        ballElmList.push(ballDiv);
+        ballLeft += 1400;
+    }
+}
+
+
+function barrierHidden(){
+    fireElmList.forEach(elm=> elm.style.visibility = 'hidden');
+    ballElmList.forEach(elm=> elm.style.visibility = 'hidden');
+}
+
+function barrierVisible(){
+    fireElmList.forEach(elm=> elm.style.visibility = 'visible');
+    ballElmList.forEach(elm=> elm.style.visibility = 'visible');
 }
 
 

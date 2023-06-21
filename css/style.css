@@ -107,3 +107,25 @@ body {
 #instruction > ul > li {
     padding: 5px;
 }
+
+
+.fire {
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 58vh;
+    background-image: url(../img/background/fire.gif);
+    background-size: contain;
+    transform: rotate(180deg);
+}
+
+.ball {
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    background-color: rgb(230, 163, 163);
+    top: 75vh;
+    /* background-image: url(../img/background/rock.jpg); */
+    /* background-size: cover; */
+    border-radius: 100%;
+}
