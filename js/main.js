@@ -18,36 +18,41 @@ let score = 0;
 let down = false;
 let up = true;
 let dead = false;
+let moving = true;
 
 
 
 document.body.addEventListener('keydown', (eventData)=> {
-    if (eventData.code === 'Space') {
-        jump = true;
-    } else if (eventData.code === 'ArrowRight'){
-        boxElm.style.transform = "";
-        run = true;
-        dx = 30;
-    }else if (eventData.code === 'ArrowLeft'){
-        run = true;
-        boxElm.style.transform = "rotateY(180deg)";
-        dx = -30;
-    } else if (eventData.code === 'ArrowDown'){
-        down = true;
-        up = false;
-    } else if (eventData.code === 'ArrowUp'){
-        up = true;
+    if(moving) {
+        if (eventData.code === 'Space') {
+            jump = true;
+        } else if (eventData.code === 'ArrowRight') {
+            boxElm.style.transform = "";
+            run = true;
+            dx = 30;
+        } else if (eventData.code === 'ArrowLeft') {
+            run = true;
+            boxElm.style.transform = "rotateY(180deg)";
+            dx = -30;
+        } else if (eventData.code === 'ArrowDown') {
+            down = true;
+            up = false;
+        } else if (eventData.code === 'ArrowUp') {
+            up = true;
+        }
     }
 });
 
 document.body.addEventListener('keyup', (eventData) => {
-        if (eventData.code === 'ArrowRight'){
+    if(moving) {
+        if (eventData.code === 'ArrowRight') {
             run = false;
             dx = 0;
-        }else if (eventData.code === 'ArrowLeft'){
+        } else if (eventData.code === 'ArrowLeft') {
             run = false;
             dx = 0;
         }
+    }
 });
 
 
@@ -55,7 +60,7 @@ document.body.addEventListener('keyup', (eventData) => {
 let a = 0;
 setInterval(()=>{
     a++;
-    if(!jump && !run && !down){
+    if(!jump && !run && !down && !dead){
         drawIdle();
     } else if(jump && (a % 2 === 0)){
         drawJump()
@@ -71,13 +76,19 @@ setInterval(()=>{
 }, 40);
 
 
+let runspeed = 0
 setInterval(()=> {
-    if (jump) {
+    runspeed++;
+    if (jump){
         doJump();
-    } else if (run) {
+    }
+    if (run && (runspeed % 15 == 0)){
         doRun();
     }
-},5);
+    if (moving){
+        moveBackground();
+    }
+}, 5);
 
 
 
@@ -119,6 +130,13 @@ function drawDead(){
         ddead = 10;
     }
     boxElm.style.backgroundImage = `url('img/Dead (${ddead++}).png')`;
+}
+
+let backgroundImagePosition = 0;
+function moveBackground(){
+    backgroundImagePosition -= 0.7;
+    run = true;
+    backElm.style.backgroundPositionX = backgroundImagePosition + 'px';
 }
 
 
