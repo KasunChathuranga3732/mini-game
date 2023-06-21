@@ -40,3 +40,70 @@ body {
     text-align: center;
     line-height: 50px;
 }
+
+
+
+.frontDiv {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(41, 129, 206, 0.779);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 10000;
+}
+
+.frontDiv > div > button {
+    font-weight: bold;
+    font-size: 3rem;
+    background-color: green;
+    border-radius: 10px;
+    box-shadow: 1px -1px 9px 6px black;
+}
+
+.frontDiv > div > button:hover {
+    cursor: pointer;
+    scale: 1.2;
+}
+
+
+.frontDiv > div:last-child {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.frontDiv > div:first-child {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+#content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    gap: 20px;
+}
+
+#instruction {
+    text-align: center;
+}
+
+
+#instruction > h1 {
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+#instruction > span {
+    font-size: 28px;
+    margin-bottom: 10px;
+    display: inline-block;
+    text-decoration: underline;
+}
+
+#instruction > ul > li {
+    padding: 5px;
+}

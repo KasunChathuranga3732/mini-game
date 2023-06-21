@@ -3,11 +3,19 @@ const boxElm = document.createElement('div');
 const htmlElm = document.body;
 boxElm.classList.add('box');
 backElm.appendChild(boxElm);
+const btnStart = $('#btn-start');
+const contentElm = $('#content');
 
 const scoreBoard = document.createElement('div');
 scoreBoard.className = 'score';
 scoreBoard.innerText = `Score: 0`;
 backElm.appendChild(scoreBoard);
+
+const frontdiv = document.querySelector('.frontDiv');
+const winmsg = document.querySelector('.frontDiv > div:first-child');
+backElm.appendChild(frontdiv);
+boxElm.style.visibility = 'hidden';
+scoreBoard.style.visibility = 'hidden';
 
 
 
@@ -18,8 +26,15 @@ let score = 0;
 let down = false;
 let up = true;
 let dead = false;
-let moving = true;
+let moving = false;
 
+
+btnStart.on('click', (eventData)=> {
+    moving = true;
+    boxElm.style.visibility = 'visible';
+    scoreBoard.style.visibility = 'visible';
+    frontdiv.style.visibility = 'hidden';
+});
 
 
 document.body.addEventListener('keydown', (eventData)=> {
