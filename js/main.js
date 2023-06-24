@@ -11,9 +11,9 @@ scoreBoard.className = 'score';
 scoreBoard.innerText = `Score: 0`;
 backElm.appendChild(scoreBoard);
 
-const frontdiv = document.querySelector('.frontDiv');
-const winmsg = document.querySelector('.frontDiv > div:first-child');
-backElm.appendChild(frontdiv);
+const frontDiv = document.querySelector('.frontDiv');
+const winMsg = document.querySelector('.frontDiv > div:first-child');
+backElm.appendChild(frontDiv);
 boxElm.style.visibility = 'hidden';
 scoreBoard.style.visibility = 'hidden';
 
@@ -23,7 +23,6 @@ scoreBoard.style.visibility = 'hidden';
 let jump = false;
 let run = false;
 let down = false;
-let up = true;
 let dead = false;
 let moving = false;
 let dx = 0;
@@ -50,7 +49,7 @@ btnStart.on('click', (eventData)=> {
     fireElm();
     boxElm.style.visibility = 'visible';
     scoreBoard.style.visibility = 'visible';
-    frontdiv.style.visibility = 'hidden';
+    frontDiv.style.visibility = 'hidden';
     barrierVisible();
 
 });
@@ -70,15 +69,12 @@ document.body.addEventListener('keydown', (eventData)=> {
             dx = -30;
         } else if (eventData.code === 'ArrowDown'){
             down = true;
-            up = false;
-        } else if (eventData.code === 'ArrowUp'){
-            up = true;
         } else if (eventData.code === 'Escape'){
             moving = false;
             run = false;
             jump = false;
             slide = false;
-            frontdiv.style.visibility = 'visible';
+            frontDiv.style.visibility = 'visible';
             boxElm.style.visibility = 'hidden';
             scoreBoard.style.visibility = 'hidden';
             btnStart.text('RESTART');
@@ -101,13 +97,13 @@ document.body.addEventListener('keyup', (eventData) => {
     }
 });
 
-let runspeed = 0
+let runSpeed = 0
 setInterval(()=> {
-    runspeed++;
+    runSpeed++;
     if (jump){
         doJump();
     }
-    if (run && (runspeed % 15 == 0)){
+    if (run && (runSpeed % 15 === 0)){
         doRun();
     }
     if (moving){
@@ -128,7 +124,7 @@ setInterval(()=>{
     } else if(jump && (a % 2 === 0)){
         drawJump();
 
-    }else if(down && (a % 7 === 0)){
+    }else if(down && !jump && (a % 7 === 0)){
         drawSlide();
 
     } else if(dead && (a % 3 === 0)){
@@ -157,14 +153,14 @@ setInterval(()=>{
         slideSound.pause();
     }
 
-    if(dead && !deadsound){
+    if(dead && !deadSound){
         over.play();
         runSound.pause();
     } else if(!down){
         over.pause();
     }
 
-    if ( a == 150) a = 0;
+    if ( a === 150) a = 0;
 
 },40);
 
@@ -176,8 +172,6 @@ setInterval(()=>{
 
         score +=10;
         scoreBoard.innerText = `Score: ${score}`;
-
-        if(b === 100) b = 0;
     }
 },40);
 
@@ -211,10 +205,10 @@ function space(elm, gap){
         elm.x = elm.x - 18;
     }
 
-    let xdiff = (boxElm.offsetLeft + boxElm.offsetWidth/2) - (elm.offsetLeft + elm.offsetWidth/2);
-    let ydiff = (boxElm.offsetTop + boxElm.offsetHeight/2) - (elm.offsetTop + elm.offsetHeight/2);
+    let xDiff = (boxElm.offsetLeft + boxElm.offsetWidth/2) - (elm.offsetLeft + elm.offsetWidth/2);
+    let yDiff = (boxElm.offsetTop + boxElm.offsetHeight/2) - (elm.offsetTop + elm.offsetHeight/2);
 
-    const hypot = Math.hypot(xdiff, ydiff);
+    const hypot = Math.hypot(xDiff, yDiff);
     if(hypot < boxElm.offsetWidth/2 + elm.offsetWidth/2 - gap){
         fail();
     }
@@ -277,31 +271,30 @@ function drawSlide(){
     boxElm.style.top = 70 +'vh';
     if(slide === 6) {
         down = false;
-        up = true;
         slide = 1;
         boxElm.style.top = 70 +'vh';
     }
 }
 
-let deadsound = false;
-let ddead = 1;
+let deadSound = false;
+let dDead = 1;
 function drawDead(){
     boxElm.style.top = 67 + 'vh';
-    if(ddead === 11) {
-        ddead = 10;
+    if(dDead === 11) {
+        dDead = 10;
         over.pause();
-        deadsound = true;
+        deadSound = true;
     }
-    boxElm.style.backgroundImage = `url('img/Dead (${ddead++}).png')`;
+    boxElm.style.backgroundImage = `url('img/Dead (${dDead++}).png')`;
 }
 
 
 
 
-fireLeft = 1000;
+let fireLeft = 1000;
 function fireElm(){
     for(let i=0; i<20; i++){
-        var fireDiv = document.createElement('div');
+        let fireDiv = document.createElement('div');
         fireDiv.className = 'fire';
         fireDiv.style.left = fireLeft + 'px';
         fireDiv.x = fireLeft;
@@ -312,7 +305,7 @@ function fireElm(){
 
 }
 
-ballLeft = 1700;
+let ballLeft = 1700;
 function ballElm(){
     for(let i=0; i<20; i++){
         var ballDiv = document.createElement('div');
@@ -345,9 +338,9 @@ function fail(){
     jump = false;
     slide = false;
     setTimeout(() => {
-        winmsg.innerText = `Fail
+        winMsg.innerText = `Fail
                             Your Score: ${score}`
-        frontdiv.style.visibility = 'visible';
+        frontDiv.style.visibility = 'visible';
         boxElm.style.visibility = 'hidden';
         scoreBoard.style.visibility = 'hidden';
         contentElm.css('visibility', 'hidden');
@@ -365,9 +358,9 @@ function finish(){
     jump = false;
     slide = false;
 
-    winmsg.innerText = `You Won the GAME
+    winMsg.innerText = `You Won the GAME
                             Your Score: ${score}`
-    frontdiv.style.visibility = 'visible';
+    frontDiv.style.visibility = 'visible';
     boxElm.style.visibility = 'hidden';
     scoreBoard.style.visibility = 'hidden';
     contentElm.css('visibility', 'hidden');
