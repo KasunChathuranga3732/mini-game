@@ -40,6 +40,11 @@ let over = new Audio("sound/over.mp3");
 
 
 btnStart.on('click', (eventData)=> {
+    if (htmlElm.requestFullscreen) {
+        htmlElm.requestFullscreen(); // Enter full-screen mode
+    } else if (htmlElm.mozRequestFullScreen) {
+        htmlElm.mozRequestFullScreen(); // For Firefox
+    }
     moving = true;
     ballElm();
     fireElm();
