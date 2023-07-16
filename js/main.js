@@ -1,5 +1,5 @@
-const btnStart = $('#btn-start');
-const contentElm = $('#content');
+const btnStart = document.body.querySelector('#btn-start');
+const contentElm = document.body.querySelector('#content');
 const boxElm = document.createElement('div');
 const htmlElm = document.body;
 boxElm.classList.add('box');
@@ -38,7 +38,7 @@ let over = new Audio("sound/over.mp3");
 
 
 
-btnStart.on('click', (eventData)=> {
+btnStart.addEventListener('click', (eventData)=> {
     if (htmlElm.requestFullscreen) {
         htmlElm.requestFullscreen(); // Enter full-screen mode
     } else if (htmlElm.mozRequestFullScreen) {
@@ -343,11 +343,11 @@ function fail(){
         frontDiv.style.visibility = 'visible';
         boxElm.style.visibility = 'hidden';
         scoreBoard.style.visibility = 'hidden';
-        contentElm.css('visibility', 'hidden');
+        contentElm.style.visibility = 'hidden';
         barrierHidden();
     }, 3000);
     setTimeout(() => {
-        btnStart.text('Reload');
+        btnStart.innerText = 'Reload';
         location.reload();
     },5000);
 }
@@ -363,7 +363,7 @@ function finish(){
     frontDiv.style.visibility = 'visible';
     boxElm.style.visibility = 'hidden';
     scoreBoard.style.visibility = 'hidden';
-    contentElm.css('visibility', 'hidden');
+    contentElm.style.visibility = 'hidden';
     barrierHidden();
 
     setTimeout(() => {
